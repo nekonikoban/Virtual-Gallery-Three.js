@@ -1,0 +1,193 @@
+html {
+    min-height: 100%;
+}
+
+head {
+	min-height: 100%;
+}
+
+body {	
+	min-height: 100%;
+	margin: 0;
+	background-color: #000;
+	color: #fff;
+	font-family: Monospace;
+	font-size: 13px;
+	line-height: 24px;
+	
+	overscroll-behavior: none;
+}
+
+a {
+	color: #ff0;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+canvas {
+	min-height: 100vh;
+	display: block;
+}
+
+a, input, select {
+	pointer-events: auto;
+}
+
+.dg.ac {
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	z-index: 2 !important; 
+}
+
+.loader {
+	width: 100%;
+	height: 100%;
+	top:  0%;
+	left: 0;
+	position: fixed;
+	display: block;
+	background-color: rgb(0, 0, 0);
+	z-index: 99;
+	text-align: center;
+	background-size: 100%;
+	object-fit: cover;
+  }
+
+  .frame {
+	overflow-y: hidden;
+  }
+
+  #overlay {
+	position: fixed;
+	display: none;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0,0,0,0.9);
+	z-index: 2;
+	cursor: pointer;
+  }
+  
+  #overlay-header-text{
+	font-family: "Roboto", Helvetica, sans-serif;
+	position: absolute;
+	text-align: center;
+	top: 50%;
+	left: 50%;
+	font-size: 50px;
+	color: white;
+	transform: translate(-50%,-50%);
+	-ms-transform: translate(-50%,-50%);
+  }
+
+  .form-style{
+	width: 190px;
+	background-color: rgba(15, 15, 15, 0.5);
+	color: aliceblue;
+	font-size: 18px;
+	z-index: 99;
+	border: #fff;
+}
+
+input[type='radio'] {
+	-webkit-appearance:none;
+	width:20px;
+	height:20px;
+	border:1px solid darkgray;
+	border-radius:50%;
+	cursor:pointer;
+	outline:none;
+	box-shadow:0 0 5px 0px gray inset;
+	-ms-transform: scale(2.9); /* IE 9 */
+    -webkit-transform: scale(2.9); /* Chrome, Safari, Opera */
+	 transform: scale(2.9);
+	 margin-left: 30px;
+  }
+  
+  input[type='radio']:hover {
+	box-shadow:0 0 10px 0px rgb(255, 255, 255) inset;
+  }
+  
+  input[type='radio']:before {
+	content:'';
+	display:block;
+	width:60%;
+	height:60%;
+	margin: 20% auto;    
+	border-radius:50%;    
+  }
+  input[type='radio']:checked:before {
+	background:rgb(255, 255, 255);
+  }
+
+	label {
+		width: 70px;
+		font-weight: bold;
+		font-size: 28px;
+		padding-right: 50px;
+		font-family: "Roboto";
+		margin-left: 17px;
+		color:rgb(255, 255, 255);
+	}
+
+	.label.main{
+		position: auto;
+		width: 70px;
+		font-weight: bold;
+		font-size: 35px;
+		font-family: "Roboto";
+		color:rgb(255, 255, 255);
+	}
+	
+	.myButton.main {
+		box-shadow: 0px 20px 20px 1px #ffffff;
+		background-color:transparent;
+		border-radius:8px;
+		display:block;
+		cursor:pointer;
+		color:#ffffff;
+		font-family:Arial;
+		font-size:30px;
+		font-weight:bold;
+		padding:35px 80px;
+		text-shadow:0px 3px 3px #ffffff;
+	}
+	.myButton.main:hover {
+		background-color: rgb(255, 255, 255, 0.2);
+	}
+	.myButton.main:active {
+		position:relative;
+		top:1px;
+	}
+
+	.myImage.arrows {
+		position:absolute; z-index: 99; display: block; color: #000;
+			box-shadow: 0px 0px 0px 0px #000;
+			background-color:transparent;
+			border-radius:8px;
+			display:block;
+			cursor:pointer;
+			color:#000;
+			font-family:Arial;
+			font-size:20px;
+			font-weight:bold;
+			padding:20px 60px;
+			margin-top: 0;
+			z-index: 99;
+			text-shadow:0px 0px 0px rgb(255, 255, 255);
+	}
+	.myImage.arrows:hover {
+		background-color: rgb(255, 255, 255, 0.2);
+	}
+	.myImage.arrows:active {
+		position:relative;
+		top:1px;
+	}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Anketa</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="">
+	<meta http-equiv="Cache-control" content="no-cache">
+	<link type="text/css" rel="stylesheet" href="css/style.css">
+<script
+		src="https://code.jquery.com/jquery-3.5.1.js"
+		integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+		crossorigin="anonymous">
+		import ReactSVG from 'react-svg'
+</script>
+<script src="js/skel.min.js"></script>
+<script src="js/skel-layers.min.js"></script>
+<script src="js/init.js"></script>
+<noscript>
+	<link rel="stylesheet" href="css/skel.css" />
+	<link rel="stylesheet" href="css/style.css" />
+	<link rel="stylesheet" href="css/style-xlarge.css" />
+</noscript>
+</head>
+<!--Loader-->
+<div class="loader">
+
+<!-- Panorama body-->
+<body id="homepage" oncontextmenu="return false;">
+	<!--Homepage-->
+	<section id="banner" class="landing">
+		<div class="content">	
+			<header>
+				<h2 style="font-weight: bold;">Virtuelna Galerija uvreda</h2>
+				<br />
+				<p style="font-size: 20px;">
+					Dobrodošli na virtuelnu Galeriju uvreda. Galerija je stvarni prikaz primjera govora mržnje 
+					iz online prostora koji su učesnici iz devet različitih političkih stranaka iz BiH prikupili tokom
+					treninga koje je organizovala Fondacija Boris Divković.
+					Vi odlučite da li je ovo primjeren sadržaj, sloboda govora ili ipak uvreda i govor mržnje? 
+				<br /><br /><br /></p>
+				<p style="font-size: 22px; font-weight: bold;">Upute za korištenje</p>
+				<p style="font-size: 20px;">
+					Pomoću lijeve tipke miša možete rotirati galeriju, a pomoću desne pomijerati
+					galeriju po potrebi (koristite strelice na tastaturi za fokus).
+					Ocijenite u formama koje se nalaze ispod postera da li je to sloboda govora,
+					uvreda, govor mržnje ili poziv na nasilje?
+				</p>
+				</br>
+					Označite jedno ili više polja prije nego pritisnete dugme  <span style="font-weight: bold; font-size: 20px;">„POTVRDI“</span> 
+				</br>
+					<p style="font-size: 20px; font-weight: bold;">Na svaku formu možete odgovoriti samo jednom!</p>
+				</br>
+				<a href="#" class="button special" onclick="gotoPanorama()">3D Galerija</a>
+				<br /> <br /> <br /> <br /> <br /> 
+				<iframe class="landing" width="620" height="400" src="https://www.youtube.com/embed/YEeGjVeo06Q?loop=1&mute=1"></iframe>
+			</header>	
+			<br /> <br /> 
+			<p class= "banner" style="padding-top: 0%; color:gray; font-size: 13px; font-style: italic;">
+				Projekat se realizuje zahvaljujući podršci programa Bosnia and Herzegovina Resilience Initiative (BHRI),
+				koji sprovodi Međunarodna organizacija za migracije (IOM),<br /> uz finansijsku podršku Američke agencije za
+				međunarodni razvoj (USAID)
+			</p>
+		</div>		
+	</section>
+	<script>
+		var modal = document.getElementById("myModal");
+		var img = document.getElementById("tutorialGif");
+		var modalImg = document.getElementById("img01");
+		var captionText = document.getElementById("caption");
+		img.onclick = function(){
+		  modal.style.display = "block";
+		  modalImg.src = this.src;
+		  captionText.innerHTML = this.alt;
+		}
+		var span = document.getElementsByClassName("close")[0];
+		
+		span.onclick = function() { 
+		  modal.style.display = "none";
+		}
+		</script>
+	<script>
+		function gotoPanorama()
+	   {
+		   //window.scrollTo({ left: 0, top: document.body.scrollHeight, behavior: "smooth" });
+		   //window.scrollIntoView({behavior: "smooth"}); 
+		   window.open("galerija.html","_self") 
+	   }
+   </script>
+  <script> 
+			$(window).ready(function() {
+		});
+	</script>
+   </div>
+</body>
+</html>

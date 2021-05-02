@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Galerija</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="">
+	<meta http-equiv="Cache-control" content="no-cache">
+	<link type="text/css" rel="stylesheet" href="panorama.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script
+		src="https://code.jquery.com/jquery-3.5.1.js"
+		integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+		crossorigin="anonymous">
+</script>
+
+</head>
+<!--Loader-->
+<div class="loader"></div>
+<!-- Panorama body-->
+<body id="panorama" oncontextmenu="return false;">
+	<a id="home" href="#" class="myButton main" data-toggle="tooltip" data-placement="right" title="Početna" 
+	    style="position:absolute; z-index: 99; display: block; color: rgb(255, 255, 255);
+			box-shadow: 2px 2px 2px 1px rgb(255, 255, 255);
+			background-color:transparent;
+			border-radius:8px;
+			display:block;
+			cursor:pointer;
+			color:rgb(255, 255, 255);
+			font-family:Arial;
+			font-size:33px;
+			font-weight:bold;
+			padding:20px 60px;
+			margin-top: 3px;
+			text-shadow:0px 1px 1px rgb(255, 255, 255); visibility: hidden;" onclick="gotoHome()"><i class="fa fa-home"></i></a>
+	<a id="menu1" href="#" class="myButton main" data-toggle="tooltip" data-placement="right" title="Info" 
+		style="position:absolute; z-index: 99; display: block; color: rgb(255, 255, 255);
+			box-shadow: 0px 2px 2px 2px rgb(255, 255, 255);
+			background-color:transparent;
+			border-radius:8px;
+			display:block;
+			cursor:pointer;
+			color:rgb(255, 255, 255);
+			font-family:Arial;
+			font-size:33px;
+			font-weight:bold;
+			padding:20px 60px;
+			margin-left: 160px;
+			margin-top: 3px;
+			text-shadow:0px 1px 1px rgb(255, 255, 255); visibility: hidden;" onclick="on()"><i class="fa fa-question-circle"></i></a>
+<div id="main">
+	<div id="overlay" onclick="off()" style="z-index: -2;">
+		<div id="overlay-header-text" style="font-size: 25px;">Ovo su razlike između navedenih pojmova i primjera govora mržnje koje ste pročitali u našoj virtuelnoj Galeriji
+		</br>
+			<p id="upute" style="font-size: 28px; line-height: 110%;">
+				<p id="paragraph2" style="font-size: 20px; float: left; padding-left: 0%; text-align: justify;"> 
+
+                    <span style="color: #cf0000; font-weight: bold; float: left;">Govor Mržnje</span> - Svi oblici izražavanja koji potiču predrasude, degradaciju, marginaliziraju,  
+
+                    ili pozivaju na nasilje prema osobama ili grupama ljudi na određenim osnovama i atributima, 
+
+                    kao što su rasa, etnička pripadnost, seksualna orijentacija, politička stajališta, religija, spol,  
+
+                    starost, tjelesna ili mentalna sposobnost, te bilo kojih drugih razlika. <br /><br /> 
+
+                    <span style="color: #cf0000; font-weight: bold; float: left;">Uvrede</span> - Izjave ili ponašanja koja omalovažavaju drugo lice, sa namjerom da im ponize čast ili  
+
+                    denunciraju aspekt identiteta. <br /><br /> 
+
+                    <span style="color: #cf0000; font-weight: bold; float: left;">Poziv na nasilje</span> - Govor mržnje koji potiče jednu osobu ili skupinu ljudi da nanese štetu na drugu.  
+
+                    Zbog mogućih posljedica, koji su u ekstremu nasilje ili čak genocid, zabranjeno je međunarodnim  
+
+                    pravom.<br /><br /> 
+
+                    <span style="color: #cf0000; font-weight: bold; float: left;">Sloboda govora</span> - Osnovno demokratsko pravo svakog pojedinca (ili skupine pojedinaca) da javno  
+
+                    izrazi, primi i širi svoja mišljenja, uvjerenja, ideje, i osjećanja bez ograničenja Vlade i vlasti. 
+
+                    Ova sloboda se mora provoditi u skladu sa drugim ljudskim pravima kako ne bi došlo do zloupotrebe. <br /><br /><br /> 
+
+                </p> 	
+					<p id="paragraph3" style="font-size: 27px;">Kliknite za nastavak u galeriju</p>
+			</p>
+		</div>
+	</div>
+		<script> 
+			function on(){
+				document.getElementById("overlay").style.display = "block";
+				document.getElementById("overlay").style.zIndex = 2;
+			}
+		</script>
+		<script>
+			function off() {
+				document.getElementById("overlay").style.display = "none";
+			}
+		</script>
+		<script> 
+			function on2(){	
+			}
+		</script>
+			<script>
+				function gotoHome(){
+				   window.open("http://vrgalerija.online/home.html","_self") 
+			   }
+		   </script>
+</div>
+</body>
+<script type='module'>
+"use strict";
+import * as THREE from '../build/three.module.js';
+import { CSS3DRenderer, CSS3DObject } from './jsm/renderers/CSS3DRenderer.js';
+import { OrbitControls } from './jsm/controls/OrbitControls.js';
+import { GUI } from './jsm/libs/dat.gui.module.js'
+import { TrackballControls } from './jsm/controls/TrackballControls.js'
+import { FirstPersonControls } from './jsm/controls/FirstPersonControls.js'
+import { FlyControls} from './jsm/controls/FlyControls.js'
+
+//Scene
+var camera, scene, renderer, controls;
+var target = new THREE.Vector3();
+
+var lon = 90, lat = 0, lonOffset = 0.1, cc = 0;
+var phi = 0, theta = 0;
+var minPan, maxPan;
+var hold = -1, moveFront = 5, moveBack = 5;
+var tempCamX;
+var tempCamZ ;
+var tempContX;
+var tempContZ ;
+
+const formWidth  = 340;
+const formHeight = 300;
+
+var pointerX, pointerY;
+
+var arrow1, circle;
+var dynObjBtnHome;
+var doorElement;
+var arrowClicked = false;
+
+var sides;
+
+//Forms
+var globalIP;
+const maxForms   = 15;
+var input1       = [], input2 = [], input3 = [], input4 = [];
+var vals 		 = []; //session values
+var previousVals = []; //last hits
+var existing     = false;
+var emptyIndexes = [];
+var emptyInd     = 0;
+var validEntry   = false;
+var radioIDs     = [];
+
+init();
+animate();
+
+function refreshPage(){
+    location.reload();
+}
+
+//document.addEventListener("deviceready", init, false); // MOBILE FIRE CORDOVA
+
+function init() {
+    camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 100000);
+    scene = new THREE.Scene();
+
+    var sideWalls  = 'textures/dark_wall_v4.jpg';
+    var floorWall  = 'textures/glossy.jpg';
+    var groundWall = 'textures/ground_v2.jpg';
+    sides = [
+        {
+            url: sideWalls, // Right
+            position: [- 720, 0, 0],
+            rotation: [0, Math.PI / 2, 0],
+        },
+        {
+            url: sideWalls, // Left
+            position: [720, 0, 0],
+            rotation: [0, - Math.PI / 2, 0]
+        },
+        {
+
+            url: floorWall,
+            position: [0, 720, 0],
+            rotation: [Math.PI / 2, 0, Math.PI]
+        },
+        {
+            url: groundWall,
+            position: [0, -330, 0],
+            rotation: [ Math.PI / 2, 0, 0]
+        },
+        {
+            url: sideWalls,
+            position: [0, 0, 720],
+            rotation: [0, Math.PI, 0]
+        },
+        {
+            url: sideWalls,
+            position: [0, 0, - 720],
+            rotation: [0, 0, 0]
+        }
+    ];
+
+    //Main room
+    initWalls();
+    initLamp()
+    pullFromSheets();  
+	initPosters();
+
+    renderer = new CSS3DRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+    //document.body.style.touchAction = 'none';
+
+    //Touch
+    document.addEventListener('touchstart', onPointerDown, false);
+    document.addEventListener('wheel', onDocumentMouseWheel, false);
+    document.addEventListener("keydown", onDocumentKeyDown, false);
+    window.addEventListener('resize', onWindowResize, false);
+
+    initCameraControls();
+}
+
+function initCameraControls(){
+    controls = new OrbitControls(camera, renderer.domElement);
+
+    controls.panningMode = 1;
+
+    controls.autoRotate = false;
+    controls.autoRotateSpeed = 0.4;
+
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.1;
+
+    controls.maxPolarAngle = Math.PI / 2;
+    controls.minPolarAngle = Math.PI / 2 - 0.3;
+
+    controls.rotateSpeed = 0.4;
+    controls.zoomSpeed = 3;
+    controls.panSpeed = 3;
+    controls.keyPanSpeed = 2;
+
+    controls.maxDistance = 300;
+
+    controls.target.x = 0;
+    controls.target.y = 1.6;
+    controls.target.z = 400;
+
+    minPan = new THREE.Vector3( - 376, 50, - 155 );
+    maxPan = new THREE.Vector3( 376, 50, 1000 );
+
+    controls.update();
+}
+
+function onDocumentKeyDown(event) {
+    var xSpeed = 5;
+    var ySpeed = 5;
+
+    var keyCode = event.which;
+
+    if (keyCode == 40) {        
+                lookBack();
+    } else if (keyCode == 38) { 
+               lookFront();
+    } else if (keyCode == 39) {  
+               lookRight();
+    } else if (keyCode == 37) { 
+                lookLeft();  
+    } else if (keyCode == 32) { // Reset
+                controls.target.x = 0;
+                controls.target.z = 400;
+    }
+};
+
+function lookFront(){
+    controls.target.x = 0;
+    controls.target.z = 400;
+    camera.position.x = 0;
+    camera.position.z = 100;
+    controls.update();
+}
+
+function lookBack(){
+    controls.target.x = 0;
+    controls.target.z = 400;
+    camera.position.x = 0;
+    camera.position.z = 700;
+    controls.update();
+}
+
+function lookRight(){
+    controls.target.x = 72;
+    controls.target.z = 460;
+    camera.position.x = 386;
+    camera.position.z = 460;
+    controls.update(); 
+}
+
+function lookLeft(){
+    controls.target.x = -72;
+    controls.target.z = 460;
+    camera.position.x = -386;
+    camera.position.z = 460;
+    controls.update(); 
+}
+
+function initLamp(){
+    var element = document.createElement('img');
+        element.draggable = false;
+        element.src = '/textures/lamp.png';
+        element.width = 280;
+        element.height = 300;
+        document.getElementsByTagName("body")[0].appendChild(element);
+        var object = new CSS3DObject(element);
+        object.position.x = 0;
+        object.position.y = 250;
+        object.position.z = 1500;
+        object.rotation.x = 0;
+        object.rotation.y = Math.PI;
+        object.rotation.z = 0;
+        scene.add(object);
+}
+
+function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    //window.scrollTo({top: window.innerHeight*2 , behavior: 'smooth'});
+    renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+function onPointerDown(event) {
+    //event.preventDefault();
+    if (event === false) return;
+
+    pointerX = event.targetTouches[0].clientX;
+    pointerY = event.clientY;
+
+    window.addEventListener('touchmove', onPointerMove, false);
+    window.addEventListener('touchend', onPointerUp, false);
+    if(cc++ >= 1)
+        controls.autoRotate = false;
+}
+
+function onPointerMove(event) {
+    if (event.isPrimary === false) return;
+
+    lon -= (event.targetTouches[0].clientX - pointerX) * 0.2;
+    lat += (event.clientY - pointerY) * 0;
+
+    pointerX = event.touches[0].clientX;
+    pointerY = event.clientY;
+}
+
+function onPointerUp(event) {
+    if (event.isPrimary === false) return;
+
+    window.removeEventListener('touchmove', onPointerMove);
+    window.removeEventListener('touchend', onPointerUp);
+}
+
+function onDocumentMouseWheel(event) {
+    var fov = camera.fov + event.deltaY * 0.015;
+    camera.fov = THREE.MathUtils.clamp(fov, 25, 80);
+    camera.updateProjectionMatrix();
+}
+
+function animate() {
+
+    requestAnimationFrame(animate);
+
+    //tempCamX = camera.position.x; tempCamZ = camera.position.z;
+    //tempContX = controls.target.x; tempContZ = controls.target.z;
+
+            //console.log("Target xz:  " +    controls.target.x + " : " + controls.target.z);
+            //console.log("Positi xz:  " + camera.position.x + " : "+ camera.position.z)
+      
+    controls.target.clamp( minPan, maxPan );
+    controls.update();
+
+    renderer.render(scene, camera);
+}
+
+function initWalls() {
+
+    // RIGHT WALL SIDE
+    for (var i = 0; i < 3; i++) {
+
+        var side = sides[0];
+
+        var element = document.createElement('img');
+        element.draggable = false;
+        element.width = 1026;
+        element.src = side.url;
+
+        var object = new CSS3DObject(element);
+        switch (i) {
+            case 0: object.position.fromArray(side.position); break;
+            case 1: object.position.x = 720;  object.position.z = 1000; break;
+            case 2: object.position.x = -720; object.position.y = 0; object.position.z = -1000; 
+                    object.rotation.x = 0; object.rotation.y = Math.PI; object.rotation.z = 0;break;
+ 
+        }
+        object.rotation.fromArray(side.rotation);
+        scene.add(object);
+    }
+
+    // 	LEFT WALL SIDE		
+
+    for (var i = 0; i < 3; i++) {
+
+        var side = sides[1];
+
+        var element = document.createElement('img');
+        element.draggable = false;
+        element.width = 1026; //  gap.
+        element.src = side.url;
+
+        var object = new CSS3DObject(element);
+        switch (i) {
+            case 0: object.position.fromArray(side.position); break;
+            case 1: object.position.x = -720; object.position.z = 1015; break;
+            case 2: object.position.x = 720; object.position.z = -1015; break;
+        }
+        object.rotation.fromArray(side.rotation);
+        scene.add(object);
+    }
+
+    // FRONT WALL 
+    var side = sides[4];
+    var element = document.createElement('img');
+    element.draggable = false;
+    element.width = 1450; //  gap.
+    element.height = 680;
+    element.src = side.url;
+
+    var object = new CSS3DObject(element);
+    object.position.x = 0;
+    object.position.y = 0;
+    object.position.z = 1500;
+
+    object.rotation.fromArray(side.rotation);
+    scene.add(object);
+
+
+    //BACK WALL		
+    for(var i=0; i<3; i++){
+        var side = sides[5];
+            var element = document.createElement('img');
+            element.draggable = false;
+            element.width = 1450; //  gap.
+            element.height = 680;
+            element.src = side.url;
+
+            var object = new CSS3DObject(element);
+            switch (i) {
+                case 0: object.position.x = 0; object.position.z = -500; break;
+                case 1: object.position.x = 0; object.position.z = -1515; break;
+                case 2: object.position.x = 0; object.position.z = -600; break;
+            }
+        
+        object.rotation.fromArray(side.rotation);
+        scene.add(object);
+    }
+
+    // FLOOR WALL 
+
+    var side = sides[2];
+
+    var element = document.createElement('img');
+    element.draggable = false;
+    element.width = 2300; //  gap.
+    element.height = 3500;
+    element.src = side.url;
+
+    var object = new CSS3DObject(element);
+    object.position.x = 0;
+    object.position.y = 330;
+    object.position.z = 0;
+    object.rotation.fromArray(side.rotation);
+    scene.add(object);
+
+    //GROUND WALL
+    for (var i = 0; i < 1; i++) {
+
+        var side = sides[3];
+
+        var element = document.createElement('img');
+        element.draggable = false;
+        element.width = 3100; //  gap.
+        element.height = 4520;
+        element.src = side.url;
+
+        var object = new CSS3DObject(element);
+        switch (i) {
+            case 0: object.position.fromArray(side.position); break;
+            case 1: object.position.y = -500;
+                object.position.z = 160;
+                object.rotation.z = Math.PI / 2;
+                break;
+        }
+        object.rotation.fromArray(side.rotation);
+        scene.add(object);
+    }
+}
+
+function strcmp(a, b)
+{   
+    return (a<b?-1:(a>b?1:0));  
+}
+
+$.get('https://www.cloudflare.com/cdn-cgi/trace', function(data) {
+var split = data.split("\n");
+globalIP = split[2].substring(split[2].indexOf('=') + 1);
+})
+
+function timeStamp(){
+    return new Date().toLocaleString();;
+}
+
+function pullFromSheets(){ //FIRST TO LOAD?
+    fetch("https://api.apispreadsheets.com/data/11755/").then(res=>{
+        if (res.status === 200){
+            res.json().then(data=>{
+                const  yourData  = data;
+                var    index     = 0;
+                var stringifyIP  = "\"".concat(globalIP).concat("\"");
+
+                for(let i=0; i<yourData.data.length; i++){
+                    if(strcmp(stringifyIP, JSON.stringify((yourData.data[i].kol1)))===0){
+                        existing = true;
+                        index = i;
+                    }
+                }
+                    if(existing){ // && At least one filed is filled [ensure non-empty fields exists]
+                        previousVals[15] = yourData.data[index].kol1;
+                        previousVals[0]  = yourData.data[index].kol2;
+                        previousVals[1]  = yourData.data[index].kol3;
+                        previousVals[2]  = yourData.data[index].kol4;
+                        previousVals[3]  = yourData.data[index].kol5;
+                        previousVals[4]  = yourData.data[index].kol6;
+                        previousVals[5]  = yourData.data[index].kol7;
+                        previousVals[6]  = yourData.data[index].kol8;
+                        previousVals[7]  = yourData.data[index].kol9;
+                        previousVals[8]  = yourData.data[index].kol10;
+                        previousVals[9]  = yourData.data[index].kol11;
+                        previousVals[10] = yourData.data[index].kol12;
+                        previousVals[11] = yourData.data[index].kol13;
+                        previousVals[12] = yourData.data[index].kol14;
+                        previousVals[13] = yourData.data[index].kol15;
+                        previousVals[14] = yourData.data[index].kol16;
+                        
+                        for(let j = 0; j < maxForms; j++){
+                            if(previousVals[j].length == 0){
+                                emptyIndexes[emptyInd] = j;
+                                emptyInd++;
+                            } else{
+                                vals[j] = previousVals[j];
+                            }
+                        }
+                            if(emptyInd != 0)
+                                createAcceptButton();
+                            else
+                                showCompletedMsg();
+                        formRemainingElements();
+                    } else {
+                        formAllElements();
+                        createAcceptButton();
+					}
+					document.getElementById("home").style.visibility = "visible"; 
+                    vals[15] = globalIP;
+            }).catch(err => console.log(err))
+        }
+        else{
+            alert("Došlo je do greške   [status: 'api-pull' failed to execute]");
+        }
+    })
+}
+
+function pushToSheets(){
+    fetch("https://api.apispreadsheets.com/data/11755/", {
+            method: "POST",
+            body: JSON.stringify({
+                "data": 
+                {		"kol1":vals[15],"kol2":vals[0],"kol3":vals[1],"kol4":vals[2],
+                        "kol5":vals[3],"kol6":vals[4],"kol7":vals[5],"kol8":vals[6],"kol9":vals[7],"kol10":vals[8],
+                        "kol11":vals[9],"kol12":vals[10],"kol13":vals[11],"kol14":vals[12],"kol15":vals[13],"kol16":vals[14],"kol17":timeStamp()
+                }}),
+        }).then(res =>{
+            if (res.status === 201){
+                setTimeout(function(){				
+					refreshPage();
+				}, 2500);
+            }
+            else{
+                alert("Došlo je do greške   [status: 'push' failed to execute]");
+                setTimeout(function(){refreshPage()}, 2500);
+            }
+        })
+}
+
+function updateSheet(){
+    fetch("https://api.apispreadsheets.com/data/11755/", {
+	method: "POST",
+	body: JSON.stringify(
+        {"data": 
+        {		
+                    "kol1":vals[15],"kol2":vals[0],"kol3":vals[1],"kol4":vals[2],
+                    "kol5":vals[3],"kol6":vals[4],"kol7":vals[5],"kol8":vals[6],"kol9":vals[7],"kol10":vals[8],
+                    "kol11":vals[9],"kol12":vals[10],"kol13":vals[11],"kol14":vals[12],"kol15":vals[13],"kol16":vals[14], "kol17":timeStamp()
+        }   , "query": "select*from2824wherekol1='".concat(vals[15]).concat("'")}),
+        }).then(res =>{
+            if (res.status === 201){
+                setTimeout(function(){				
+					refreshPage();
+				}, 2500);
+            }
+            else{
+                alert("Došlo je do greške   [status: 'update' failed to execute]");
+                setTimeout(function(){refreshPage()}, 2500);
+            }
+        })
+}
+
+function createAcceptButton(){
+        var btn = document.createElement("button");
+        btn.setAttribute("id", "accept");
+        btn.setAttribute("value", "POTVRDI");
+        btn.setAttribute("class", "myButton main");
+        btn.textContent = "POTVRDI SVE";
+        document.getElementsByTagName("body")[0].appendChild(btn);
+        var object = new CSS3DObject(btn);
+        object.position.set(0, 0, 1500);
+        object.rotation.y = Math.PI;
+        scene.add(object);
+        btn.addEventListener('click', function() {
+                if(validEntry){
+				   // window.onbeforeunload = function () { $('#loading').show()};
+					document.getElementById("overlay-header-text").innerHTML = "<span style='font-weight: bold;'>Hvala vam na odgovoru.<br /> Molimo pričekajte nekoliko trenutaka.</span>";					
+					on();
+                    if(emptyInd>0)
+                        updateSheet();
+                     else
+                        pushToSheets();
+                } else alert("Odgovorite na barem jednu formu!");
+        });
+        btn.addEventListener('touchstart', function() {
+                if(validEntry){
+					document.getElementById("overlay-header-text").innerHTML = "<span style='font-weight: bold;'>Hvala vam na odgovoru.<br /> Molimo pričekajte nekoliko trenutaka.</span>";					
+					on();
+                    if(emptyInd>0)
+                        updateSheet();
+                     else
+                        pushToSheets();
+                } else alert("Odgovorite na barem jednu formu!");
+        });
+}
+
+function showCompletedMsg(){
+        var img = document.createElement("label");
+            img.draggable = false;
+            //img.src = "/textures/checked.png";
+            img.style.width = '280px';
+            img.style.height = '200px';
+            img.setAttribute('class', 'label main');
+            img.setAttribute( 'style', 'width:150px; white-space: pre; text-align: center;');
+            img.textContent = "  Hvala vam što ste" + "\n\n" + "učestvovali u anketi!";
+            document.getElementsByTagName("body")[0].appendChild(img); 
+        var object = new CSS3DObject(img);
+        object.position.set(20, -10, 1500);
+        object.rotation.y = Math.PI;
+        scene.add(object);
+}
+
+function formRemainingElements(){
+	document.getElementById("menu1").style.visibility = "visible";
+	on();
+    var br = document.createElement("br"); 
+    for(let i=0; i<maxForms; i++){
+        var yAxis = -190;
+        var x = emptyIndexes.includes(i);
+        if(x==false){	
+            yAxis = - 100;	
+            var img = document.createElement("label");
+            img.draggable = false;
+            //img.src = "/textures/checked.png";
+            img.style.width = '280px';
+            img.style.height = '200px';
+            img.setAttribute('class', 'label main');
+            img.setAttribute( 'style', 'white-space: pre;');
+            img.textContent = "Odgovorili ste:" + "\n\n\n\n" + vals[i].toString();
+            document.getElementsByTagName("body")[0].appendChild(img); 
+            var obj = new CSS3DObject(img);
+            switch(i){
+                    case 0: //Right
+                    {
+                        obj.position.set(-720, yAxis, 1230);
+                        obj.rotation.y = Math.PI / 2;
+                    }break;
+                    case 1: //Right
+                    {
+                        obj.position.set(-720, yAxis, 930);
+                        obj.rotation.y = Math.PI / 2;
+                    }break;
+                    case 2: //Right
+                    {
+                        obj.position.set(-720, yAxis, 630);
+                        obj.rotation.y = Math.PI / 2;
+                    }break;
+                    case 3: //Right
+                    {
+                        obj.position.set(-720, yAxis, 330);
+                        obj.rotation.y = Math.PI / 2;
+                    }break;
+                    case 4: //Right
+                    {
+                        obj.position.set(-720, yAxis, 30);
+                        obj.rotation.y = Math.PI / 2;
+                    }break;
+                    case 5: //Right
+                    {
+                        obj.position.set(-720, yAxis, -270);
+                        obj.rotation.y = Math.PI / 2;
+                    }break;
+                    case 6: //Back
+                    {
+                        obj.position.set(-450, yAxis, -500);
+                        obj.rotation.y = 0;
+                    }break;
+                    case 7: //Back
+                    {
+                        obj.position.set(-50, yAxis, -500);
+                        obj.rotation.y = 0;
+                    }break;
+                    case 8: //Back
+                    {
+                        obj.position.set(350, yAxis, -500);
+                        obj.rotation.y = 0;
+                    }break;
+                    case 9: //Left
+                    {
+                        obj.position.set(700, yAxis, -330); 
+                        obj.rotation.y = -Math.PI / 2;
+                    }break;
+                    case 10: //Left
+                    {
+                        obj.position.set(700, yAxis, -30); 
+                        obj.rotation.y = -Math.PI / 2;
+                    }break;
+                    case 11: //Left
+                    {
+                        obj.position.set(700, yAxis, 270); 
+                        obj.rotation.y = -Math.PI / 2;
+                    }break;
+                    case 12: //Left
+                    {
+                        obj.position.set(700, yAxis, 570); 
+                        obj.rotation.y = -Math.PI / 2;
+                    }break;
+                    case 13: //Left
+                    {
+                        obj.position.set(700, yAxis, 870); 
+                        obj.rotation.y = -Math.PI / 2;
+                    }break;
+                    case 14: //Left
+                    {
+                        obj.position.set(700, yAxis, 1170); 
+                        obj.rotation.y = -Math.PI / 2;
+                    }break;
+                }
+            scene.add(obj);	
+        }
+        else{
+            var form = document.createElement("form"); 
+            form.draggable = false;
+            form.setAttribute("id", "myForm".concat(i.toString()));
+            form.setAttribute("class", "style.css");
+            form.style.width = '340px';
+            form.style.height = '300px';
+            var question = document.createElement("label");
+            question.setAttribute("class", "label main");
+            question.textAlign ="left";
+            question.textContent = "Da li je ovo:";
+            input1[i] = document.createElement("input"); 
+            input1[i].setAttribute("type", "radio"); 
+            input1[i].setAttribute("name", (i+1).toString());
+            input1[i].setAttribute("id", "Odgovor1".concat(i.toString()));
+            input1[i].setAttribute("value", "Govor mržnje");
+            input1[i].addEventListener("touchstart", function(){
+                    document.getElementById("Odgovor1".concat(i.toString())).checked = true;
+                    vals[i] = this.value; 
+                    validEntry = true;
+                    });
+            input2[i] = document.createElement("input"); 
+            input2[i].setAttribute("type", "radio"); 
+            input2[i].setAttribute("name", (i+1).toString());
+            input2[i].setAttribute("id", "Odgovor2".concat(i.toString())); 
+            input2[i].setAttribute("value", "Uvreda");
+            input2[i].addEventListener("touchstart", function(){
+                    document.getElementById("Odgovor2".concat(i.toString())).checked = true;
+                    vals[i] = this.value; 
+                    validEntry = true;
+                    });
+            input3[i] = document.createElement("input"); 
+            input3[i].setAttribute("type", "radio"); 
+            input3[i].setAttribute("name", (i+1).toString());
+            input3[i].setAttribute("id", "Odgovor3".concat(i.toString()));
+            input3[i].setAttribute("value", "Sloboda govora");
+            input3[i].addEventListener("touchstart", function(){
+                    document.getElementById("Odgovor3".concat(i.toString())).checked = true;
+                    vals[i] = this.value; 
+                    validEntry = true;
+                });		
+            input4[i] = document.createElement("input"); 
+            input4[i].setAttribute("type", "radio"); 
+            input4[i].setAttribute("name", (i+1).toString());
+            input4[i].setAttribute("id", "Odgovor4".concat(i.toString()));
+            input4[i].setAttribute("value", "Poziv na nasilje");	
+            input4[i].addEventListener("touchstart", function(){
+                    document.getElementById("Odgovor4".concat(i.toString())).checked = true;
+                    vals[i] = this.value; 
+                    validEntry = true;
+                });					
+            var label = document.createElement("label");
+            label.textContent = "Govor mržnje?";
+            label.setAttribute("for", "Odgovor1".concat(i.toString()));
+            var label2 = document.createElement("label");
+            label2.textContent = "Uvreda?";
+            label2.setAttribute("for", "Odgovor2".concat(i.toString()));
+            var label3 = document.createElement("label");
+            label3.textContent = "Sloboda govora?";
+            label3.setAttribute("for", "Odgovor3".concat(i.toString()));
+            var label4 = document.createElement("label");
+            label4.textContent = "Poziv na nasilje?";
+            label4.setAttribute("for", "Odgovor4".concat(i.toString()));	
+            form.appendChild(question);
+            form.appendChild(br.cloneNode()); 
+            form.appendChild(br.cloneNode()); 			
+            form.appendChild(input1[i]);
+            form.appendChild(label);
+            form.appendChild(br.cloneNode()); 
+            form.appendChild(br.cloneNode()); 
+            form.appendChild(input2[i]);
+            form.appendChild(label2);
+            form.appendChild(br.cloneNode()); 
+            form.appendChild(br.cloneNode()); 
+            form.appendChild(input3[i]);
+            form.appendChild(label3);
+            form.appendChild(br.cloneNode()); 
+            form.appendChild(br.cloneNode()); 
+            form.appendChild(input4[i]);
+            form.appendChild(label4);
+            document.getElementsByTagName("body")[0].appendChild(form); 
+
+            var obj = new CSS3DObject(form);
+            switch(i){
+                    case 0: //Right
+                    {
+                        obj.position.set(-720, yAxis, 1130);
+                        obj.rotation.y = Math.PI / 2;
+                    }break;
+                    case 1: //Right
+                    {
+                        obj.position.set(-720, yAxis, 830);
+                        obj.rotation.y = Math.PI / 2;
+                    }break;
+                    case 2: //Right
+                    {
+                        obj.position.set(-720, yAxis, 530);
+                        obj.rotation.y = Math.PI / 2;
+                    }break;
+                    case 3: //Right
+                    {
+                        obj.position.set(-720, yAxis, 230);
+                        obj.rotation.y = Math.PI / 2;
+                    }break;
+                    case 4: //Right
+                    {
+                        obj.position.set(-720, yAxis, -70);
+                        obj.rotation.y = Math.PI / 2;
+                    }break;
+                    case 5: //Right
+                    {
+                        obj.position.set(-720, yAxis, -370);
+                        obj.rotation.y = Math.PI / 2;
+                    }break;
+                    case 6: //Back
+                    {
+                        obj.position.set(-330, yAxis, -500);
+                        obj.rotation.y = 0;
+                    }break;
+                    case 7: //Back
+                    {
+                        obj.position.set(70, yAxis, -500);
+                        obj.rotation.y = 0;
+                    }break;
+                    case 8: //Back
+                    {
+                        obj.position.set(470, yAxis, -500);
+                        obj.rotation.y = 0;
+                    }break;
+                    case 9: //Left
+                    {
+                        obj.position.set(720, yAxis, -220); 
+                        obj.rotation.y = -Math.PI / 2;
+                    }break;
+                    case 10: //Left
+                    {
+                        obj.position.set(720, yAxis, 80); 
+                        obj.rotation.y = -Math.PI / 2;
+                    }break;
+                    case 11: //Left
+                    {
+                        obj.position.set(720, yAxis, 380); 
+                        obj.rotation.y = -Math.PI / 2;
+                    }break;
+                    case 12: //Left
+                    {
+                        obj.position.set(720, yAxis, 680); 
+                        obj.rotation.y = -Math.PI / 2;
+                    }break;
+                    case 13: //Left
+                    {
+                        obj.position.set(720, yAxis, 980); 
+                        obj.rotation.y = -Math.PI / 2;
+                    }break;
+                    case 14: //Left
+                    {
+                        obj.position.set(720, yAxis, 1280); 
+                        obj.rotation.y = -Math.PI / 2;
+                    }break;
+                }
+            scene.add(obj);	
+        }		
+    }
+    for(let i=0; i<maxForms; i++){
+        var x = emptyIndexes.includes(i);
+        if(x==false){
+        }else{
+            var str1= "input[type=radio][name=".concat(i+1).concat("]");
+                    $(str1).change(function() {
+                    if (this.value == 'Govor mržnje') {
+                        vals[i] = this.value;
+                        validEntry = true;
+                    }
+                    else if (this.value == 'Uvreda') {
+                        vals[i] = this.value;
+                        validEntry = true;
+                    }
+                    else if (this.value == 'Sloboda govora') {
+                        vals[i] = this.value;
+                        validEntry = true;
+                    }
+                    else if (this.value == 'Poziv na nasilje') {
+                        vals[i] = this.value;
+                        validEntry = true;
+                    }
+                });
+            }	
+    }
+}
+
+function formAllElements(){
+
+var br = document.createElement("br"); 
+var zAxis = 1430, xAxis = -700, yAxis = -190;
+
+    for(let i=0; i<maxForms; i++){
+            var form = document.createElement("form"); 
+            form.draggable = false;
+            form.setAttribute("id", "myForm".concat(i.toString()));
+            form.setAttribute("class", "style.css");
+            form.style.width = '340px';
+            form.style.height = '300px';
+            var question = document.createElement("label");
+            question.setAttribute("class", "label main");
+            question.textAlign ="left";
+            question.textContent = "Da li je ovo:";
+            input1[i] = document.createElement("input"); 
+            input1[i].setAttribute("type", "radio"); 
+            input1[i].setAttribute("name", (i+1).toString());
+            input1[i].setAttribute("id", "Odgovor1".concat(i.toString()));
+            input1[i].setAttribute("value", "Govor mržnje");
+            input1[i].addEventListener("touchstart", function(){
+                    document.getElementById("Odgovor1".concat(i.toString())).checked = true;
+                    vals[i] = this.value; 
+                    validEntry = true;
+                    });
+            input2[i] = document.createElement("input"); 
+            input2[i].setAttribute("type", "radio"); 
+            input2[i].setAttribute("name", (i+1).toString());
+            input2[i].setAttribute("id", "Odgovor2".concat(i.toString())); 
+            input2[i].setAttribute("value", "Uvreda");
+            input2[i].addEventListener("touchstart", function(){
+                    document.getElementById("Odgovor2".concat(i.toString())).checked = true;
+                    vals[i] = this.value; 
+                    validEntry = true;
+                    });
+            input3[i] = document.createElement("input"); 
+            input3[i].setAttribute("type", "radio"); 
+            input3[i].setAttribute("name", (i+1).toString());
+            input3[i].setAttribute("id", "Odgovor3".concat(i.toString()));
+            input3[i].setAttribute("value", "Sloboda govora");
+            input3[i].addEventListener("touchstart", function(){
+                    document.getElementById("Odgovor3".concat(i.toString())).checked = true;
+                    vals[i] = this.value; 
+                    validEntry = true;
+                });		
+            input4[i] = document.createElement("input"); 
+            input4[i].setAttribute("type", "radio"); 
+            input4[i].setAttribute("name", (i+1).toString());
+            input4[i].setAttribute("id", "Odgovor4".concat(i.toString()));
+            input4[i].setAttribute("value", "Poziv na nasilje");	
+            input4[i].addEventListener("touchstart", function(){
+                    document.getElementById("Odgovor4".concat(i.toString())).checked = true;
+                    vals[i] = this.value; 
+                    validEntry = true;
+                });			
+            var label = document.createElement("label");
+            label.textContent = "Govor mržnje?";
+            label.setAttribute("for", "Odgovor1".concat(i.toString()));
+            var label2 = document.createElement("label");
+            label2.textContent = "Uvreda?";
+            label2.setAttribute("for", "Odgovor2".concat(i.toString()));
+            var label3 = document.createElement("label");
+            label3.textContent = "Sloboda govora?";
+            label3.setAttribute("for", "Odgovor3".concat(i.toString()));	
+            var label4 = document.createElement("label");
+            label4.textContent = "Poziv na nasilje?";
+            label4.setAttribute("for", "Odgovor4".concat(i.toString()));
+            form.appendChild(question);
+            form.appendChild(br.cloneNode()); 	
+            form.appendChild(br.cloneNode()); 					
+            form.appendChild(input1[i]);
+            form.appendChild(label);
+            form.appendChild(br.cloneNode()); 
+            form.appendChild(br.cloneNode()); 
+            form.appendChild(input2[i]);
+            form.appendChild(label2);
+            form.appendChild(br.cloneNode()); 
+            form.appendChild(br.cloneNode()); 
+            form.appendChild(input3[i]);
+            form.appendChild(label3);
+            form.appendChild(br.cloneNode()); 
+            form.appendChild(br.cloneNode()); 
+            form.appendChild(input4[i]);
+            form.appendChild(label4);
+            document.getElementsByTagName("body")[0].appendChild(form); 
+
+            var obj = new CSS3DObject(form);
+                switch(true){
+                    case (i < 6): //Right
+                    {
+                        obj.position.set(-720, yAxis, zAxis-=300);
+                        obj.rotation.y = Math.PI / 2;
+                    }break;
+                    case (i < 9): //Back
+                    {
+                        obj.position.set(xAxis+=370, yAxis, -500);
+                        xAxis+= 30;
+                        obj.rotation.y = 0;
+                        zAxis = -520;
+                    }break;
+                    case (i < 15): //Left
+                    {
+                        obj.position.set(720, yAxis, zAxis+=300); 
+                        obj.rotation.y = -Math.PI / 2;
+                    }break;
+                }
+            scene.add(obj);	
+    }								
+//Listeners Mouse
+        for(let i=0; i<maxForms; i++){
+            var str1= "input[type=radio][name=".concat(i+1).concat("]");
+                    $(str1).change(function() {
+                    if (this.value == 'Govor mržnje') {
+                        vals[i] = this.value; 
+                        validEntry = true;
+                    }
+                    else if (this.value == 'Uvreda') {
+                        vals[i] = this.value;
+                        validEntry = true;
+                    }
+                    else if (this.value == 'Sloboda govora') {
+                        vals[i] = this.value;
+                        validEntry = true;
+                    }
+                    else if(this.value == 'Poziv na nasilje'){
+                        vals[i] = this.value;
+                        validEntry = true;
+                    }
+                });
+        }
+}
+
+function initPosters() {
+
+    var imgPaths = [
+        'galerija/0.jpg', 'galerija/15.jpg',
+        'galerija/4.jpg', 'galerija/6.jpg', 'galerija/2.jpg', 'galerija/5.jpg', 'galerija/3.jpg', 'galerija/14.jpg',
+        'galerija/7.jpg', 'galerija/8.jpg', 'galerija/9.jpg',
+        'galerija/10.jpg', 'galerija/11.jpg', 'galerija/12.jpg', 'galerija/00.jpg', 'galerija/1.jpg', 'galerija/13.jpg'
+    ];
+    var initX = 300, initY = 0, initZ = 1500;
+    var rotX = 0, rotY = Math.PI, rotZ = 0;
+    var offsetX = -600, offsetY = 0, offsetZ = 0;
+    var element, object;
+
+    for (var i = 0; i < imgPaths.length; i++) {
+
+        element = document.createElement('img');
+        element.draggable = false;
+        element.src = imgPaths[i];
+        element.width = 200;
+
+        object = new CSS3DObject(element);
+
+        switch (i) {
+            //FRONT WALL
+            case 0:
+                {
+                    element.width = 370;
+                    object.position.x = initX + 100; object.position.y = initY; object.position.z = initZ;
+                    object.rotation.x = rotX; object.rotation.y = rotY; object.rotation.z = rotZ;
+                    scene.add(object);
+                } break;
+            case 1:
+                {
+                    element.width = 370;
+                    object.position.x = initX + offsetX - 100; object.position.y = initY; object.position.z = initZ;
+                    object.rotation.x = rotX; object.rotation.y = rotY; object.rotation.z = rotZ;
+                    offsetX = object.position.x;
+                    scene.add(object);
+                } break;
+            //RIGHT WALL
+            case 2:
+                {
+                    initX = -720; initY = 140; initZ = 1200;
+                    rotX = 0; rotY = Math.PI / 2; rotZ = 0;
+                    object.position.x = initX; object.position.y = initY; object.position.z = initZ;
+                    object.rotation.x = rotX; object.rotation.y = rotY; object.rotation.z = rotZ;
+                    offsetZ = object.position.z - 300;	
+                    scene.add(object);
+                } break;
+            case 3:
+                {
+                    object.position.x = initX; object.position.y = initY; object.position.z = offsetZ;
+                    object.rotation.x = rotX; object.rotation.y = rotY; object.rotation.z = rotZ;
+                    offsetZ = object.position.z - 300;
+                    scene.add(object);
+                } break;
+            case 4:
+                {
+                    object.position.x = initX; object.position.y = initY; object.position.z = offsetZ;
+                    object.rotation.x = rotX; object.rotation.y = rotY; object.rotation.z = rotZ;
+                    offsetZ = object.position.z - 300;
+                    scene.add(object);
+                } break;
+            case 5:
+                {
+                    object.position.x = initX; object.position.y = initY; object.position.z = offsetZ;
+                    object.rotation.x = rotX; object.rotation.y = rotY; object.rotation.z = rotZ;
+                    offsetZ = object.position.z - 300;
+                    scene.add(object);
+                } break;
+            case 6:
+                {
+                    object.position.x = initX; object.position.y = initY; object.position.z = offsetZ;
+                    object.rotation.x = rotX; object.rotation.y = rotY; object.rotation.z = rotZ;
+                    offsetZ = object.position.z - 300;
+                    scene.add(object);
+                } break;
+            case 7:
+                {
+                    object.position.x = initX; object.position.y = initY; object.position.z = offsetZ;
+                    object.rotation.x = rotX; object.rotation.y = rotY; object.rotation.z = rotZ;
+                    offsetZ = object.position.z - 300;
+                    scene.add(object);
+                } break;
+            //BACK WALL
+            case 8:
+                {
+                    initX = -400; initY = 140; initZ = -500;
+                    rotX = 0; rotY = 0; rotZ = 0;
+                    object.position.x = initX; object.position.y = initY; object.position.z = initZ;
+                    object.rotation.x = rotX; object.rotation.y = rotY; object.rotation.z = rotZ;
+                    offsetX = object.position.x + 400;
+                    scene.add(object);
+                } break;
+            case 9:
+                {
+                    object.position.x = offsetX; object.position.y = initY; object.position.z = initZ;
+                    object.rotation.x = rotX; object.rotation.y = rotY; object.rotation.z = rotZ;
+                    offsetX = object.position.x + 400;
+                    scene.add(object);
+                } break;
+            case 10:
+                {
+                    object.position.x = offsetX; object.position.y = initY; object.position.z = initZ;
+                    object.rotation.x = rotX; object.rotation.y = rotY; object.rotation.z = rotZ;
+                    offsetX = object.position.x + 400;
+                    scene.add(object);
+                } break; 
+            //LEFT WALL
+            case 11:
+                {
+                    initX = 720; initY = 140; initZ = -300;
+                    rotX = 0; rotY = -Math.PI / 2; rotZ = 0;
+                    object.position.x = initX; object.position.y = initY; object.position.z = initZ;
+                    object.rotation.x = rotX; object.rotation.y = rotY; object.rotation.z = rotZ;
+                    offsetZ = object.position.z + 300;
+                    scene.add(object);
+                } break;
+            case 12:
+                {
+                    object.position.x = initX; object.position.y = initY; object.position.z = offsetZ;
+                    object.rotation.x = rotX; object.rotation.y = rotY; object.rotation.z = rotZ;
+                    offsetZ = object.position.z + 300;
+                    scene.add(object);
+                } break;
+            case 13:
+                {
+                    object.position.x = initX; object.position.y = initY; object.position.z = offsetZ;
+                    object.rotation.x = rotX; object.rotation.y = rotY; object.rotation.z = rotZ;
+                    offsetZ = object.position.z + 300;
+                    scene.add(object);
+                } break;
+            case 14:
+                {
+                    object.position.x = initX; object.position.y = initY; object.position.z = offsetZ;
+                    object.rotation.x = rotX; object.rotation.y = rotY; object.rotation.z = rotZ;
+                    offsetZ = object.position.z + 300;
+                    scene.add(object);
+                } break;
+            case 15:
+                {
+                    object.position.x = initX; object.position.y = initY; object.position.z = offsetZ;
+                    object.rotation.x = rotX; object.rotation.y = rotY; object.rotation.z = rotZ;
+                    offsetZ = object.position.z + 300;
+                    scene.add(object);
+                } break;
+            case 16:
+                {
+                    object.position.x = initX; object.position.y = initY; object.position.z = offsetZ;
+                    object.rotation.x = rotX; object.rotation.y = rotY; object.rotation.z = rotZ;
+                    offsetZ = object.position.z + 300;
+                    scene.add(object);
+                } break;
+            default: console.log("gallery init switch error [out of bounds]");
+        }
+    }
+}
+
+</script>
+<script>
+	$(window).on('load', function() { $(".loader").fadeOut("slow"); });
+	document.getElementById("overlay").style.display = "block";
+</script>
+</html>
