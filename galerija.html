@@ -527,33 +527,33 @@
         fetch("https://api.apispreadsheets.com/data/11755/").then(res => {
             if (res.status === 200) {
                 res.json().then(data => {
-                    const yourData = data;
+                    const pulledData = data;
                     var index = 0;
                     var stringifyIP = "\"".concat(globalIP).concat("\"");
 
-                    for (let i = 0; i < yourData.data.length; i++) {
-                        if (strcmp(stringifyIP, JSON.stringify((yourData.data[i].kol1))) === 0) {
+                    for (let i = 0; i < pulledData.data.length; i++) {
+                        if (strcmp(stringifyIP, JSON.stringify((pulledData.data[i].kol1))) === 0) {
                             existing = true;
                             index = i;
                         }
                     }
                     if (existing) { // && At least one filed is filled [ensure non-empty fields exists]
-                        previousVals[15] = yourData.data[index].kol1;
-                        previousVals[0] = yourData.data[index].kol2;
-                        previousVals[1] = yourData.data[index].kol3;
-                        previousVals[2] = yourData.data[index].kol4;
-                        previousVals[3] = yourData.data[index].kol5;
-                        previousVals[4] = yourData.data[index].kol6;
-                        previousVals[5] = yourData.data[index].kol7;
-                        previousVals[6] = yourData.data[index].kol8;
-                        previousVals[7] = yourData.data[index].kol9;
-                        previousVals[8] = yourData.data[index].kol10;
-                        previousVals[9] = yourData.data[index].kol11;
-                        previousVals[10] = yourData.data[index].kol12;
-                        previousVals[11] = yourData.data[index].kol13;
-                        previousVals[12] = yourData.data[index].kol14;
-                        previousVals[13] = yourData.data[index].kol15;
-                        previousVals[14] = yourData.data[index].kol16;
+                        previousVals[15] = pulledData.data[index].kol1;
+                        previousVals[0] = pulledData.data[index].kol2;
+                        previousVals[1] = pulledData.data[index].kol3;
+                        previousVals[2] = pulledData.data[index].kol4;
+                        previousVals[3] = pulledData.data[index].kol5;
+                        previousVals[4] = pulledData.data[index].kol6;
+                        previousVals[5] = pulledData.data[index].kol7;
+                        previousVals[6] = pulledData.data[index].kol8;
+                        previousVals[7] = pulledData.data[index].kol9;
+                        previousVals[8] = pulledData.data[index].kol10;
+                        previousVals[9] = pulledData.data[index].kol11;
+                        previousVals[10] = pulledData.data[index].kol12;
+                        previousVals[11] = pulledData.data[index].kol13;
+                        previousVals[12] = pulledData.data[index].kol14;
+                        previousVals[13] = pulledData.data[index].kol15;
+                        previousVals[14] = pulledData.data[index].kol16;
 
                         for (let j = 0; j < maxForms; j++) {
                             if (previousVals[j].length == 0) {
@@ -632,6 +632,19 @@
     }
 
     function createAcceptButton() {
+        function acceptAnswers(event) {
+            event.preventDefault()
+            if (validEntry) {
+                // window.onbeforeunload = function () { $('#loading').show()};
+                document.getElementById("overlay-header-text").innerHTML = "<span style='font-weight: bold;'>Hvala vam na odgovoru.<br /> Molimo pričekajte nekoliko trenutaka.</span>";
+                on();
+                if (emptyInd > 0)
+                    updateSheet();
+                else
+                    pushToSheets();
+            } else alert("Odgovorite na barem jednu formu!");
+        }
+
         var btn = document.createElement("button");
         btn.setAttribute("id", "accept");
         btn.setAttribute("value", "POTVRDI");
@@ -642,27 +655,9 @@
         object.position.set(0, 0, 1500);
         object.rotation.y = Math.PI;
         scene.add(object);
-        btn.addEventListener('click', function () {
-            if (validEntry) {
-                // window.onbeforeunload = function () { $('#loading').show()};
-                document.getElementById("overlay-header-text").innerHTML = "<span style='font-weight: bold;'>Hvala vam na odgovoru.<br /> Molimo pričekajte nekoliko trenutaka.</span>";
-                on();
-                if (emptyInd > 0)
-                    updateSheet();
-                else
-                    pushToSheets();
-            } else alert("Odgovorite na barem jednu formu!");
-        });
-        btn.addEventListener('touchstart', function () {
-            if (validEntry) {
-                document.getElementById("overlay-header-text").innerHTML = "<span style='font-weight: bold;'>Hvala vam na odgovoru.<br /> Molimo pričekajte nekoliko trenutaka.</span>";
-                on();
-                if (emptyInd > 0)
-                    updateSheet();
-                else
-                    pushToSheets();
-            } else alert("Odgovorite na barem jednu formu!");
-        });
+
+        btn.addEventListener('touchstart', acceptAnswers)
+        btn.addEventListener("click", acceptAnswers)
     }
 
     function showCompletedMsg() {
